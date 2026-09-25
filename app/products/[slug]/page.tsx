@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Button } from "@/components/ui/button";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { getProductBySlug } from "@/lib/db/products";
 import { formatBRL } from "@/lib/format";
 
@@ -66,11 +66,14 @@ export default async function ProductPage({ params }: PageProps) {
             {product.description}
           </p>
 
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
-            <Button type="button" size="lg" disabled>
-              Adicionar ao carrinho
-            </Button>
-            <p className="text-sm text-zinc-500">Em breve · Must 2</p>
+          <div className="mt-4">
+            <AddToCartButton
+              productId={product.id}
+              slug={product.slug}
+              name={product.name}
+              priceCents={product.priceCents}
+              imageUrl={product.imageUrl}
+            />
           </div>
         </div>
       </div>
