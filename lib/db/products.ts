@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { products } from "./schema";
 
@@ -16,4 +16,13 @@ export async function getProductBySlug(slug: string) {
     .limit(1);
 
   return rows[0] ?? null;
+}
+
+export async function getActiveProductsByIds(ids: string[]) {
+  if (ids.length === 0) return [];
+
+  return db
+    .select()
+    .from(products)
+    .where(and(inArray(products.id, ids), eq(products.active, true)));
 }

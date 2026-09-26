@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,37 @@ import { formatBRL } from "@/lib/format";
 export default function CartPage() {
   const { items, ready, itemCount, subtotalCents, setQuantity, removeItem } =
     useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleCheckout() {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      const data = (await res.json()) as { url?: string; error?: string };
+
+      if (!res.ok || !data.url) {
+        throw new Error(data.error ?? "Falha no checkout");
+      }
+
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro no checkout");
+      setLoading(false);
+    }
+  }
 
   if (!ready) {
     return (
@@ -124,12 +156,21 @@ export default function CartPage() {
         </p>
 
         <div className="flex flex-col gap-2 sm:items-end">
-          <Button type="button" size="lg" disabled>
-            Finalizar compra
+          <Button
+            type="button"
+            size="lg"
+            disabled={loading}
+            onClick={handleCheckout}
+          >
+            {loading ? "Redirecionando…" : "Finalizar compra"}
           </Button>
-          <p className="text-xs text-zinc-500">
-            Checkout Stripe · próximo passo (2.9)
-          </p>
+          {error ? (
+            <p className="text-xs text-red-600">{error}</p>
+          ) : (
+            <p className="text-xs text-zinc-500">
+              Pagamento seguro via Stripe (modo teste)
+            </p>
+          )}
         </div>
       </div>
     </div>
