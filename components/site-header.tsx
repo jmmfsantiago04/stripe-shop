@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartLink } from "@/components/cart-link";
 
 export function SiteHeader() {
   return (
@@ -18,6 +19,7 @@ export function SiteHeader() {
           >
             Início
           </Link>
+          <CartLink />
         </nav>
       </div>
     </header>
