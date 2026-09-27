@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { orderItems, orders } from "./schema";
 
@@ -25,6 +25,57 @@ export async function getOrderBySessionId(
     .where(eq(orderItems.orderId, order.id));
 
   return { ...order, items };
+}
+
+export async function getOrderById(
+  id: string,
+): Promise<OrderWithItems | null> {
+  const rows = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.id, id))
+    .limit(1);
+
+  const order = rows[0];
+  if (!order) return null;
+
+  const items = await db
+    .select()
+    .from(orderItems)
+    .where(eq(orderItems.orderId, order.id));
+
+  return { ...order, items };
+}
+
+export async function listOrders(limit = 50): Promise<OrderWithItems[]> {
+  const safeLimit = Math.min(Math.max(limit, 1), 100);
+
+  const orderRows = await db
+    .select()
+    .from(orders)
+    .orderBy(desc(orders.createdAt))
+    .limit(safeLimit);
+
+  if (orderRows.length === 0) return [];
+
+  const orderIds = orderRows.map((o) => o.id);
+
+  const itemRows = await db
+    .select()
+    .from(orderItems)
+    .where(inArray(orderItems.orderId, orderIds));
+
+  const itemsByOrderId = new Map<string, OrderItem[]>();
+  for (const item of itemRows) {
+    const list = itemsByOrderId.get(item.orderId) ?? [];
+    list.push(item);
+    itemsByOrderId.set(item.orderId, list);
+  }
+
+  return orderRows.map((order) => ({
+    ...order,
+    items: itemsByOrderId.get(order.id) ?? [],
+  }));
 }
 
 type CreateOrderInput = {
