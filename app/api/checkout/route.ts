@@ -90,6 +90,12 @@ export async function POST(request: Request) {
       cancel_url: `${appUrl}/cancel`,
       metadata: {
         source: "stripe-shop",
+        items: JSON.stringify(
+          cleaned.map((i) => ({
+            productId: i.productId,
+            quantity: i.quantity,
+          })),
+        ),
       },
     });
 

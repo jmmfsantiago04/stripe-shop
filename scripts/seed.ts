@@ -3,7 +3,6 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 
 async function main() {
-  // Import after dotenv so DATABASE_URL is available
   const { db } = await import("../lib/db");
   const { products } = await import("../lib/db/schema");
 
