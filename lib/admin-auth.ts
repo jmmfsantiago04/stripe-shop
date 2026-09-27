@@ -1,4 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { cookies } from "next/headers";
+
 
 export const ADMIN_COOKIE_NAME = "admin-session";
 
@@ -40,3 +42,9 @@ export function verifyAdminSessionToken(token: string | undefined) {
         if (a.length !== b.length) return false;
         return timingSafeEqual(a, b);
     }
+
+    export async function isAdminAuthenticated() {
+        const jar = await cookies();
+        const token = jar.get(ADMIN_COOKIE_NAME)?.value;
+        return verifyAdminSessionToken(token);
+      }
