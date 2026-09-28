@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ADMIN_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/admin-auth";
@@ -47,7 +47,7 @@ export default async function AdminOrdersPage() {
             Pedidos
           </h1>
           <p className="mt-1 text-sm text-zinc-600">
-            Últimos pedidos gravados pelo webhook do Stripe.
+            Pedidos recentes.
           </p>
         </div>
         <LogoutButton />
@@ -55,7 +55,7 @@ export default async function AdminOrdersPage() {
 
       {orders.length === 0 ? (
         <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 px-4 py-10 text-center text-sm text-zinc-600">
-          Nenhum pedido ainda. Faça um checkout de teste com o webhook ligado.
+          Nenhum pedido ainda.
         </p>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-zinc-200">

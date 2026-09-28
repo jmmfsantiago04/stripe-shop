@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { CartProvider } from "@/components/cart-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -15,12 +15,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "Stripe Shop",
-    template: "%s · Stripe Shop",
+    default: "Lumen Desk",
+    template: "%s · Lumen Desk",
   },
-  description: "Loja demo de portfolio com catálogo e checkout Stripe.",
+  description:
+    "Loja demo de portfolio: periféricos e desk setup com Neon e Stripe Checkout.",
 };
 
 export default function RootLayout({
@@ -31,9 +38,9 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900">
+      <body className="flex min-h-full flex-col bg-lumen-cream text-lumen-ink">
         <CartProvider>
           <SiteHeader />
           <main className="flex-1">{children}</main>

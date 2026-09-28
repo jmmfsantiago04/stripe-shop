@@ -9,11 +9,11 @@ export function CartLink() {
   return (
     <Link
       href="/cart"
-      className="relative text-zinc-600 transition-colors hover:text-zinc-900"
+      className="relative text-lumen-muted transition-colors hover:text-lumen-blue"
     >
       Carrinho
       {ready && itemCount > 0 ? (
-        <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-zinc-900 px-1.5 py-0.5 text-xs font-medium text-white">
+        <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-lumen-blue px-1.5 py-0.5 text-xs font-medium text-white">
           {itemCount > 99 ? "99+" : itemCount}
         </span>
       ) : null}

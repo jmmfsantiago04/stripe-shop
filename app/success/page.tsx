@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ClearCartOnSuccess } from "@/components/clear-cart-on-success";
 import { getOrderBySessionId } from "@/lib/db/orders";
 import { formatBRL } from "@/lib/format";
@@ -133,8 +133,7 @@ export default async function SuccessPage({ searchParams }: PageProps) {
         {paid ? "Pagamento confirmado" : "Pagamento em processamento"}
       </h1>
       <p className="mt-3 text-zinc-600">
-        O pedido ainda está sendo gravado. Atualize a página em alguns
-        segundos (webhook).
+        O pedido ainda está sendo confirmado. Atualize a página em alguns segundos.
       </p>
       {paid && amountCents != null ? (
         <p className="mt-6 text-lg font-semibold text-zinc-900">

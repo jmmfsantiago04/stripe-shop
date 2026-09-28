@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   createContext,
@@ -31,9 +31,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     try {
       const raw = localStorage.getItem(CART_STORAGE_KEY);
       if (raw) setItems(JSON.parse(raw) as CartItem[]);
-    } catch {
-      /* ignore */
-    }
+    } catch {}
     setReady(true);
   }, []);
 

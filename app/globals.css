@@ -7,9 +7,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-heading: var(--font-display);
+  --color-lumen-cream: #f0e2c8;
+  --color-lumen-ink: #1a1510;
+  --color-lumen-muted: #6b6358;
+  --color-lumen-line: #e0ceb0;
+  --color-lumen-blue: #2f5eff;
+  --color-lumen-blue-soft: #e8eeff;
+  --color-lumen-amber: #e67a00;
+  --color-lumen-amber-soft: #ffe8c8;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
