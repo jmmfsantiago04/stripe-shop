@@ -1,11 +1,35 @@
-import { desc, eq, inArray } from "drizzle-orm";
+import { asc, desc, eq, ilike, inArray } from "drizzle-orm";
 import { db } from "./index";
-import { orderItems, orders } from "./schema";
+import { orderItems, orders, products } from "./schema";
+import type { ProductCategoryId } from "@/lib/categories";
 
 export type Order = typeof orders.$inferSelect;
 export type OrderItem = typeof orderItems.$inferSelect;
 
 export type OrderWithItems = Order & { items: OrderItem[] };
+
+export const ORDER_SORTS = [
+  "date_desc",
+  "date_asc",
+  "total_desc",
+  "total_asc",
+] as const;
+
+export type OrderSort = (typeof ORDER_SORTS)[number];
+
+export function parseOrderSort(value: string | undefined): OrderSort {
+  if (value && (ORDER_SORTS as readonly string[]).includes(value)) {
+    return value as OrderSort;
+  }
+  return "date_desc";
+}
+
+export type ListOrdersOptions = {
+  limit?: number;
+  sort?: OrderSort;
+  q?: string;
+  category?: ProductCategoryId;
+};
 
 export async function getOrderBySessionId(
   stripeCheckoutSessionId: string,
@@ -47,14 +71,42 @@ export async function getOrderById(
   return { ...order, items };
 }
 
-export async function listOrders(limit = 50): Promise<OrderWithItems[]> {
+export async function listOrders(
+  options: ListOrdersOptions = {},
+): Promise<OrderWithItems[]> {
+  const limit = options.limit ?? 50;
+  const sort = options.sort ?? "date_desc";
+  const q = options.q?.trim() || undefined;
+  const category = options.category;
+
   const safeLimit = Math.min(Math.max(limit, 1), 100);
 
-  const orderRows = await db
-    .select()
-    .from(orders)
-    .orderBy(desc(orders.createdAt))
-    .limit(safeLimit);
+  const orderByClause =
+    sort === "date_asc"
+      ? asc(orders.createdAt)
+      : sort === "total_desc"
+        ? desc(orders.amountTotalCents)
+        : sort === "total_asc"
+          ? asc(orders.amountTotalCents)
+          : desc(orders.createdAt);
+
+  const emailClause =
+    q && q.length > 0
+      ? ilike(orders.customerEmail, `%${q}%`)
+      : undefined;
+
+  const orderRows = emailClause
+    ? await db
+        .select()
+        .from(orders)
+        .where(emailClause)
+        .orderBy(orderByClause)
+        .limit(safeLimit)
+    : await db
+        .select()
+        .from(orders)
+        .orderBy(orderByClause)
+        .limit(safeLimit);
 
   if (orderRows.length === 0) return [];
 
@@ -72,10 +124,46 @@ export async function listOrders(limit = 50): Promise<OrderWithItems[]> {
     itemsByOrderId.set(item.orderId, list);
   }
 
-  return orderRows.map((order) => ({
+  let result: OrderWithItems[] = orderRows.map((order) => ({
     ...order,
     items: itemsByOrderId.get(order.id) ?? [],
   }));
+
+  if (category) {
+    const productIds = [
+      ...new Set(
+        result
+          .flatMap((o) => o.items)
+          .map((i) => i.productId)
+          .filter((id): id is string => Boolean(id)),
+      ),
+    ];
+
+    if (productIds.length === 0) {
+      return [];
+    }
+
+    const productRows = await db
+      .select({
+        id: products.id,
+        category: products.category,
+      })
+      .from(products)
+      .where(inArray(products.id, productIds));
+
+    const categoryByProductId = new Map(
+      productRows.map((p) => [p.id, p.category]),
+    );
+
+    result = result.filter((order) =>
+      order.items.some((item) => {
+        if (!item.productId) return false;
+        return categoryByProductId.get(item.productId) === category;
+      }),
+    );
+  }
+
+  return result;
 }
 
 type CreateOrderInput = {

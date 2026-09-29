@@ -26,6 +26,7 @@ export function LogoutButton() {
       size="sm"
       disabled={pending}
       onClick={onLogout}
+      className="rounded-full border-lumen-line bg-white text-lumen-ink hover:border-lumen-blue hover:bg-lumen-blue-soft hover:text-lumen-blue"
     >
       {pending ? "Saindo…" : "Sair"}
     </Button>

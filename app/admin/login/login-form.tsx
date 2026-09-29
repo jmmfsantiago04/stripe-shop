@@ -39,11 +39,11 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto w-full max-w-sm space-y-4">
+    <form onSubmit={onSubmit} className="w-full space-y-4">
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-zinc-700"
+          className="block text-sm font-medium text-lumen-ink"
         >
           Senha
         </label>
@@ -54,7 +54,7 @@ export function LoginForm() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-400 focus:ring-2"
+          className="mt-1 w-full rounded-full border border-lumen-line bg-white px-4 py-2 text-sm text-lumen-ink outline-none focus:border-lumen-blue"
           required
         />
       </div>
@@ -64,7 +64,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-md bg-zinc-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full rounded-full bg-lumen-blue px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
       >
         {pending ? "Entrando…" : "Entrar"}
       </button>

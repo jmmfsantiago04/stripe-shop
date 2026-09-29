@@ -11,6 +11,17 @@ type CheckoutBody = {
   items?: CheckoutBodyItem[];
 };
 
+function stripeImageUrls(imageUrl: string | null): string[] | undefined {
+  if (!imageUrl) return undefined;
+  if (
+    imageUrl.startsWith("https://") ||
+    imageUrl.startsWith("http://")
+  ) {
+    return [imageUrl];
+  }
+  return undefined;
+}
+
 export async function POST(request: Request) {
   let body: CheckoutBody;
 
@@ -81,7 +92,7 @@ export async function POST(request: Request) {
             product_data: {
               name: product.name,
               description: product.description.slice(0, 200),
-              images: product.imageUrl ? [product.imageUrl] : undefined,
+              images: stripeImageUrls(product.imageUrl),
             },
           },
         };
