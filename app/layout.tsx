@@ -22,12 +22,40 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: {
     default: "Lumen Desk",
     template: "%s · Lumen Desk",
   },
   description:
     "Loja demo de portfolio: periféricos e desk setup com Neon e Stripe Checkout.",
+  icons: {
+    icon: "/lumen-desk-mark.png",
+    apple: "/lumen-desk-mark.png",
+  },
+  openGraph: {
+    title: "Lumen Desk",
+    description:
+      "Periféricos e acessórios para desk setup. Demo de portfolio com Neon e Stripe.",
+    siteName: "Lumen Desk",
+    locale: "pt_BR",
+    type: "website",
+    images: [
+      {
+        url: "/lumen-desk-lockup.png",
+        alt: "Lumen Desk",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lumen Desk",
+    description:
+      "Periféricos e acessórios para desk setup. Demo de portfolio com Neon e Stripe.",
+    images: ["/lumen-desk-lockup.png"],
+  },
 };
 
 export default function RootLayout({

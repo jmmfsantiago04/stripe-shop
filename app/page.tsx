@@ -65,12 +65,25 @@ export default async function HomePage({ searchParams }: HomeProps) {
         <CatalogFilters activeCategory={category} initialQ={q} />
 
         {items.length === 0 ? (
-          <p className="text-lumen-muted">
-            Nenhum produto com esses filtros.{" "}
-            <a href="/#produtos" className="text-lumen-blue underline">
+          <div className="rounded-2xl border border-lumen-line bg-white px-6 py-12 text-center sm:px-10">
+            <p className="text-xs font-medium tracking-wide text-lumen-muted uppercase">
+              <span className="mr-1.5 inline-block size-1.5 rounded-full bg-lumen-amber align-middle" />
+              Catálogo
+            </p>
+            <h3 className="mt-3 font-display text-2xl font-semibold text-lumen-ink">
+              Nada por aqui
+            </h3>
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-lumen-muted">
+              Nenhum produto combina com essa categoria ou busca. Limpe os filtros
+              pra ver o catálogo completo.
+            </p>
+            <a
+              href="/#produtos"
+              className="mt-6 inline-flex items-center rounded-full bg-lumen-blue px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            >
               Limpar filtros
             </a>
-          </p>
+          </div>
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((product) => (

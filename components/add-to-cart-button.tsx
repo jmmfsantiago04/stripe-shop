@@ -21,6 +21,7 @@ export function AddToCartButton(props: Props) {
       <Button
         type="button"
         size="lg"
+        className="rounded-full bg-lumen-blue px-6 text-white hover:bg-lumen-blue/90"
         onClick={() => {
           addItem(props, 1);
           setJustAdded(true);
@@ -29,8 +30,8 @@ export function AddToCartButton(props: Props) {
       >
         {justAdded ? "Adicionado!" : "Adicionar ao carrinho"}
       </Button>
-      <p className="text-sm text-zinc-500">
-        <a href="/cart" className="underline hover:text-zinc-900">
+      <p className="text-sm text-lumen-muted">
+        <a href="/cart" className="underline hover:text-lumen-ink">
           Ver carrinho
         </a>
       </p>

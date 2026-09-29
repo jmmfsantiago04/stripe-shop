@@ -45,7 +45,7 @@ export default function CartPage() {
   if (!ready) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-        <p className="text-sm text-zinc-500">Carregando carrinho…</p>
+        <p className="text-sm text-lumen-muted">Carregando carrinho…</p>
       </div>
     );
   }
@@ -53,33 +53,46 @@ export default function CartPage() {
   if (itemCount === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-lumen-ink">
           Carrinho
         </h1>
-        <p className="mt-4 text-zinc-600">Seu carrinho está vazio.</p>
-        <Link
-          href="/"
-          className="mt-6 inline-block text-sm font-medium text-zinc-900 underline"
-        >
-          Voltar ao catálogo
-        </Link>
+
+        <div className="mt-8 rounded-2xl border border-lumen-line bg-white px-6 py-12 text-center sm:px-10">
+          <p className="text-xs font-medium tracking-wide text-lumen-muted uppercase">
+            <span className="mr-1.5 inline-block size-1.5 rounded-full bg-lumen-amber align-middle" />
+            Vazio
+          </p>
+          <h2 className="mt-3 font-display text-2xl font-semibold text-lumen-ink">
+            Ainda sem peças na mesa
+          </h2>
+          <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-lumen-muted">
+            Seu carrinho está vazio. Escolha periféricos e acessórios no
+            catálogo pra montar o setup.
+          </p>
+          <Link
+            href="/#produtos"
+            className="mt-6 inline-flex items-center rounded-full bg-lumen-blue px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          >
+            Ver produtos
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+      <h1 className="font-display text-3xl font-semibold tracking-tight text-lumen-ink">
         Carrinho
       </h1>
-      <p className="mt-1 text-sm text-zinc-500">
+      <p className="mt-1 text-sm text-lumen-muted">
         {itemCount} {itemCount === 1 ? "item" : "itens"}
       </p>
 
-      <ul className="mt-8 divide-y divide-zinc-200 border-y border-zinc-200">
+      <ul className="mt-8 divide-y divide-lumen-line border-y border-lumen-line">
         {items.map((item) => (
           <li key={item.productId} className="flex gap-4 py-6">
-            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-zinc-100 ring-1 ring-zinc-200">
+            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-lumen-cream ring-1 ring-lumen-line">
               <Image
                 src={item.imageUrl}
                 alt={item.name}
@@ -94,15 +107,15 @@ export default function CartPage() {
                 <div className="min-w-0">
                   <Link
                     href={`/products/${item.slug}`}
-                    className="font-medium text-zinc-900 hover:underline"
+                    className="font-medium text-lumen-ink hover:underline"
                   >
                     {item.name}
                   </Link>
-                  <p className="mt-1 text-sm text-zinc-600">
+                  <p className="mt-1 text-sm text-lumen-muted">
                     {formatBRL(item.priceCents)}
                   </p>
                 </div>
-                <p className="shrink-0 text-sm font-medium text-zinc-900">
+                <p className="shrink-0 text-sm font-medium tabular-nums text-lumen-ink">
                   {formatBRL(item.priceCents * item.quantity)}
                 </p>
               </div>
@@ -114,13 +127,14 @@ export default function CartPage() {
                     variant="outline"
                     size="sm"
                     aria-label="Diminuir quantidade"
+                    className="border-lumen-line text-lumen-ink hover:bg-lumen-cream"
                     onClick={() =>
                       setQuantity(item.productId, item.quantity - 1)
                     }
                   >
                     −
                   </Button>
-                  <span className="w-8 text-center text-sm tabular-nums">
+                  <span className="w-8 text-center text-sm tabular-nums text-lumen-ink">
                     {item.quantity}
                   </span>
                   <Button
@@ -128,6 +142,7 @@ export default function CartPage() {
                     variant="outline"
                     size="sm"
                     aria-label="Aumentar quantidade"
+                    className="border-lumen-line text-lumen-ink hover:bg-lumen-cream"
                     onClick={() =>
                       setQuantity(item.productId, item.quantity + 1)
                     }
@@ -138,7 +153,7 @@ export default function CartPage() {
 
                 <button
                   type="button"
-                  className="text-sm text-zinc-500 underline hover:text-zinc-900"
+                  className="text-sm text-lumen-muted underline hover:text-lumen-ink"
                   onClick={() => removeItem(item.productId)}
                 >
                   Remover
@@ -149,17 +164,22 @@ export default function CartPage() {
         ))}
       </ul>
 
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-lg font-semibold text-zinc-900">
-          Subtotal{" "}
-          <span className="tabular-nums">{formatBRL(subtotalCents)}</span>
-        </p>
+      <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-lumen-line bg-white px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div>
+          <p className="text-xs font-medium tracking-wide text-lumen-muted uppercase">
+            Subtotal
+          </p>
+          <p className="mt-1 font-display text-2xl font-semibold tabular-nums text-lumen-ink">
+            {formatBRL(subtotalCents)}
+          </p>
+        </div>
 
         <div className="flex flex-col gap-2 sm:items-end">
           <Button
             type="button"
             size="lg"
             disabled={loading}
+            className="rounded-full bg-lumen-blue px-6 text-white hover:bg-lumen-blue/90"
             onClick={handleCheckout}
           >
             {loading ? "Redirecionando…" : "Finalizar compra"}
@@ -167,7 +187,7 @@ export default function CartPage() {
           {error ? (
             <p className="text-xs text-red-600">{error}</p>
           ) : (
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-lumen-muted">
               Pagamento seguro via Stripe (modo teste)
             </p>
           )}
